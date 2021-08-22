@@ -67,7 +67,7 @@ $ pip install narrenschiff
     --autogenerate \
     --location postgres/
 $ narrenschiff chest stash \
-    --treasure postgres_password \
+    --treasure postgresPassword \
     --value "Password123!" \
     --location postgres/
 </code></pre>
@@ -89,7 +89,7 @@ type: Opaque
 metadata:
     name: postgres
 data:
-    POSTGRES_PASSWORD: "{{ postgres_password | b64enc }}"
+    POSTGRES_PASSWORD: "{{ postgresPassword | b64enc }}"
 EOF
 </code></pre>
                         </div>
