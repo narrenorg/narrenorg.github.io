@@ -1,0 +1,22 @@
+#landing-page h1 {
+    font-size: 5em;
+    margin-bottom: 0.25em;
+    color: var(--main-color);
+    font-family: 'DM Mono', 'Courier New', serif;
+    font-weight: bold;
+}
+
+#landing-page main section:first-child h2 {
+    font-family: 'DM Mono', 'Courier New', serif;
+}
+
+@media only screen and (max-width: 750px) {
+    #landing-page h1 {
+        font-size: 2.5em;
+        margin-bottom: 0.5em;
+    }
+
+    #landing-page main section:first-child h2 {
+        font-size: 1em;
+    }
+}

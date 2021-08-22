@@ -1,0 +1,47 @@
+#quickstart {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15%;
+}
+
+.lp-quickstart {
+    display: flex;
+    justify-content: center;
+    text-align: left;
+}
+
+.lp-quickstart-left {
+    flex-direction: row;
+}
+
+.lp-quickstart-right {
+    flex-direction: row-reverse;
+}
+
+.lp-quickstart div {
+    width: 50%;
+    padding: 0 1em;
+}
+
+.lp-quickstart pre {
+    border-radius: 0.5em;
+}
+
+@media screen and (max-width: 750px) {
+    #quickstart {
+        padding: 0 1em;
+    }
+
+    .lp-quickstart-left {
+        flex-direction: column;
+    }
+    
+    .lp-quickstart-right {
+        flex-direction: column;
+    }
+
+    .lp-quickstart div {
+        width: 100%;
+        padding: 0;
+    }
+}

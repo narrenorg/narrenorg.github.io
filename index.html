@@ -1,0 +1,233 @@
+<html>
+    <head>
+        <title>Narrenschiff</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        
+        <link rel="icon" type="image/ico" href="static/img/favicon.ico">
+        
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet">
+        <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=DM+Mono|Roboto|Noto+Serif+JP">
+        
+        <link rel="stylesheet" href="static/css/prism.css"/>
+
+        <link rel="stylesheet" href="static/css/common.css">
+        <link rel="stylesheet" href="static/css/navbar.css">
+        <link rel="stylesheet" href="static/css/main.css">
+        <link rel="stylesheet" href="static/css/title-section.css">
+        <link rel="stylesheet" href="static/css/quickstart.css">
+        <link rel="stylesheet" href="static/css/vignette.css">
+        <link rel="stylesheet" href="static/css/footer.css">
+    </head>
+    <body id="landing-page">
+        <nav id="lp-nav">
+            <span class="navbar-toggle" id="js-navbar-toggle">
+                <i class="fas fa-bars"></i>
+            </span>
+            <a id="logo" href="https://narrenschiff.xyz">Narrenschiff</a>
+            <ul class="lp-burger" id="js-menu">
+                <li><a href="https://docs.narrenschiff.xyz/en/latest/">Documentation</a></li>
+                <li><a href="https://github.com/petarnikolovski/narrenschiff">Github</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section>
+                <h1>Narrenschiff</h1>
+                <h2>Open Source Configuration Management Tool for Kubernetes</h2>
+            </section>
+
+            <section>
+                <h2 class="section-title">Every good story starts with <code>pip install</code></h2>
+
+                <div id="quickstart">
+                    <div class="lp-quickstart lp-quickstart-left">
+                        <div >
+                            <h2>Install</h2>
+                            <p>Make a root project directory which will contain all the configuration for your cluster.</p>
+                        </div>
+                        <div>
+<pre><code class="language-shell">$ mkdir infrastructure
+$ cd infrastructure
+$ pip install narrenschiff
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="lp-quickstart lp-quickstart-right">
+                        <div >
+                            <h2>Initialize a project and encrypt a secret</h2>
+                            <p>A root project is collection of smaller course projects which contain either simple app configs, workflows, or even a complex set of templated manifests. You can also easily encrypt strings and files. All sensitive information in Helm’s <code>values.yaml</code> override is now under the lock.</p>
+                        </div>
+                        <div>
+<pre><code class="language-shell">$ narrenschiff dock \
+    --autogenerate \
+    --location postgres/
+$ narrenschiff chest stash \
+    --treasure postgres_password \
+    --value "Password123!" \
+    --location postgres/
+</code></pre>
+                        </div>
+                    </div>
+                
+                    <div class="lp-quickstart lp-quickstart-left">
+                        <div >
+                            <h2>Turn your manifests into templates</h2>
+                            <p>Power up Kubernetes manifests with Jinja templating language. You can easily add cleartext variables, or even encrypted string to them. Now you can commit Kubernetes <code>Secret</code> to the infrastructure repo without having to worry about secrets leaking. All secrets and files are encrypted using password and salt for better security. Even your execution workflows (i.e. Narrenschiff courses) can be turned into templates.</p>
+                        </div>
+                        <div>
+<pre><code class="language-shell">$ mkdir postgres/files/
+$ cat > postgres/files/secret.yaml << EOF
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+    name: postgres
+data:
+    POSTGRES_PASSWORD: "{{ postgres_password | b64enc }}"
+EOF
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="lp-quickstart lp-quickstart-right">
+                        <div >
+                            <h2>Document your workflow</h2>
+                            <p>In Narrenschiff courses are YAML files in which you write your workflows. Courses should be idempotent, self-documenting infrastructure as code. They are collection of tasks which correspond to the commands which you would actually execute using <code>kubectl</code>, <code>helm</code>, or <code>gcloud</code>. Courses are also templated, so you can reuse your variables and secrets. If you need to repeat a task several time, simply use <code>for</code> loop with Jinja!</p>
+                        </div>
+                        <div>
+<pre><code class="language-shell">$ cat > postgres/course.yaml << EOF
+---
+- name: Add secret to default namespace
+    kubectl:
+    command: apply
+    args:
+    filename:
+        - secret.yaml
+    namespace: "default"
+EOF
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="lp-quickstart lp-quickstart-left">
+                        <div >
+                            <h2>Apply changes to the cluster</h2>
+                            <p>Set sail. Deploy!</p>
+                        </div>
+                        <div>
+<pre><code class="language-shell">$ narrenschiff sail \
+    --set-course postgres/course.yaml
+</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Features</h2>
+
+                <div class="feature-vignette-container">
+                    <div class="feature-vignette">
+                        <div>
+                            <span class="fa-stack fa-3x">
+                                <i class="fas fa-circle fa-stack-2x fv-color"></i>
+                                <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </div>
+                        <div><h2>Encryption</h2></div>
+                        <div><p>If you need to source control your Secrets and sensitive values.yaml files Narrenschiff gives you an easy way to encrypt them</p></div>
+                    </div>
+
+                    <div class="feature-vignette">
+                        <div>
+                            <span class="fa-stack fa-3x">
+                                <i class="fas fa-circle fa-stack-2x fv-color"></i>
+                                <i class="fab fa-git-alt fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </div>
+                        <div><h2>Infrastructure as Code</h2></div>
+                        <div><p>No more bash scripting for your Cluster, use simple YAML files to write down sequential tasks, and document your infrastructure as you go</p></div>
+                    </div>
+
+                    <div class="feature-vignette">
+                        <div>
+                            <span class="fa-stack fa-3x">
+                                <i class="fas fa-circle fa-stack-2x fv-color"></i>
+                                <div id="jinja">
+                                    <span class="iconify fv-stack-1x" data-icon="file-icons:jinja" data-inline="false"></span>
+                                </div>
+                            </span>
+                        </div>
+                        <div><h2>Templates</h2></div>
+                        <div><p>With the help of Jinja templating language you can easily customize your manifests, and even the Narrenschiff courses – apply DRY to your infrastructure configuration also</p></div>
+                    </div>
+                </div>
+
+                <div class="feature-vignette-container">
+                    <div class="feature-vignette">
+                        <div>
+                            <span class="fa-stack fa-3x">
+                                <i class="fas fa-circle fa-stack-2x fv-color"></i>
+                                <span class="iconify fv-stack-1x" data-icon="mdi-kubernetes" data-inline="false"></span>
+                            </span>
+                        </div>
+                        <div><h2>Kubernetes</h2></div>
+                        <div><p>Instead of manually executing kubectl and kustomize, or scripting them with bash, write Narrenschiff courses to document your infrastructure</p></div>
+                    </div>
+
+                    <div class="feature-vignette">
+                        <div>
+                            <span class="fa-stack fa-3x">
+                                <i class="fas fa-circle fa-stack-2x fv-color"></i>
+                                <span class="iconify fv-stack-1x" data-icon="simple-icons:helm" data-inline="false"></span>
+                            </span>
+                        </div>
+                        <div><h2>Helm</h2></div>
+                        <div><p>With the helm module you can deploy your packaged apps, and enjoy full encryption of values.yaml file using Narrenschiff’s secretmaps</p></div>
+                    </div>
+
+                    <div class="feature-vignette">
+                        <div>
+                            <span class="fa-stack fa-3x">
+                                <i class="fas fa-circle fa-stack-2x fv-color"></i>
+                                <div id="gcp">
+                                    <span class="iconify fv-stack-1x" data-icon="logos:google-cloud-platform" data-inline="false"></span>
+                                </div>
+                            </span>
+                        </div>
+                        <div><h2>GCP</h2></div>
+                        <div><p>Orchestrate your cluster easily and in source controlled manner – Narrenschiff offers gcloud module to help you with automation of your workflows</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">But... Why?</h2>
+                <p>It is really easy to encrypt <code>values.yaml</code> containing sensitive information, or to template your manifests. You can even use kustomize's <code>secretGenerator</code> in Narrenschiff. Although we consider the encrypted strings and files to be the most powerful features of Narrenschiff, it's also a "procedural/declarative task executor" or whatever you want to call it (it's <em class="bold">YAML</em> <em class="bold">instead</em> <em class="bold">of</em> a <em class="bold">bash</em> script - come to think of it, we should also have acronym for it - YIOB - it just rolls off the tongue). So this is one more reason to use it. It's a Kubernetes configuration management tool for small businesses that were insane enough to start with Kubernetes in the first place.</p>
+            </section>
+        </main>
+
+        <footer id="lp-footer">
+            <div>
+                <div>&copy; Copyright 2021 by Petar Nikolovski</div>
+                <div><a href="#">Privacy Policy</a></div>
+            </div>
+        </footer>
+
+        <script src="static/js/prism.js"></script>
+        <script>
+            let mainNav = document.getElementById('js-menu');
+            let navBarToggle = document.getElementById('js-navbar-toggle');
+            navBarToggle.addEventListener('click', function () {
+                    mainNav.classList.toggle('lp-active');
+                }
+            );
+        </script>
+    </body>
+</html>
