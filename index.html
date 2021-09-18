@@ -123,12 +123,12 @@ EOF
 <pre><code class="language-shell">$ cat > postgres/course.yaml << EOF
 ---
 - name: Add secret to default namespace
-    kubectl:
-    command: apply
-    args:
+  kubectl:
+  command: apply
+  args:
     filename:
         - secret.yaml
-    namespace: "default"
+  namespace: "default"
 EOF
 </code></pre>
                         </div>
